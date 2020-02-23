@@ -8,10 +8,10 @@ class WrappedException(Exception):
 
     Business-named exception would merely subclass this.
     """
-    def __init__(self, exception):
-        super(WrappedException, self).__init__(exception.message)
+    def __init__(self, exception=None):
+        super(WrappedException, self).__init__()
         self.exc_info = sys.exc_info()
-        self.exception = exception
+        self.exception = exception if exception else self.exc_info[1]
 
     def throw(self):
         raise type(self), self.exception, self.exc_info[2]
@@ -38,6 +38,6 @@ Just to see the behavior of uncuaght WrappedExceptions.
 try:
     an_array = []
     an_array[9]
-except Exception as e:
-    wrap_exc = WrappedException(e)
+except Exception:
+    wrap_exc = WrappedException()
     wrap_exc.throw()
