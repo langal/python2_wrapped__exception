@@ -14,7 +14,9 @@ class WrappedException(Exception):
         self.exception = exception if exception else self.exc_info[1]
 
     def throw(self):
-        raise type(self), self.exception, self.exc_info[2]
+        if self.exc_info[0] and self.exc_info[1] and self.exc_info[2]:
+            raise type(self), self.exception, self.exc_info[2]
+        raise self
 
 """
 Verify that we can catch and re-raise a Key Violation Exception
