@@ -2,24 +2,42 @@ import sys
 import traceback
 
 class WrappedException(Exception):
+    """
+    This Exception class basically allows some Exception to be re-raised
+    as another Exception type (eg. a business exception).
 
+    Business-named exception would merely subclass this.
+    """
     def __init__(self, exception):
         super(WrappedException, self).__init__(exception.message)
         self.exc_info = sys.exc_info()
-        self.core_exception = exception
+        self.exception = exception
 
-    def print_core_stacktrace(self):
-        traceback.print_tb(self.exc_info[2])
+    def throw(self):
+        raise type(self), self.exception, self.exc_info[2]
 
-    def get_core_stacktrace(self):
-        return traceback.format_tb(self.exc_info[2])
-
-    def get_core_exception(self):
-        return self.core_exception
-
+"""
+Verify that we can catch and re-raise a Key Violation Exception
+as a "WrappedException".
+"""
 try:
-    raise Exception("HELLOW WORLD")
+    try:
+        an_array = []
+        an_array[9]
+    except Exception as e:
+        wrap_exc = WrappedException(e)
+        wrap_exc.throw()
+except WrappedException:
+    print("CAUGHT A WRAPPED EXCEPTION")
+
+print("\n===============\n")
+
+"""
+Just to see the behavior of uncuaght WrappedExceptions.
+"""
+try:
+    an_array = []
+    an_array[9]
 except Exception as e:
-    w_exception = WrappedException(e)
-    w_exception.print_core_stacktrace()
-    print(w_exception.get_core_stacktrace())
+    wrap_exc = WrappedException(e)
+    wrap_exc.throw()
