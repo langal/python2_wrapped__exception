@@ -17,29 +17,3 @@ class WrappedException(Exception):
         if self.exc_info[0] and self.exc_info[1] and self.exc_info[2]:
             raise type(self), self.exception, self.exc_info[2]
         raise self
-
-"""
-Verify that we can catch and re-raise a Key Violation Exception
-as a "WrappedException".
-"""
-try:
-    try:
-        an_array = []
-        an_array[9]
-    except Exception as e:
-        wrap_exc = WrappedException(e)
-        wrap_exc.throw()
-except WrappedException:
-    print("CAUGHT A WRAPPED EXCEPTION")
-
-print("\n===============\n")
-
-"""
-Just to see the behavior of uncuaght WrappedExceptions.
-"""
-try:
-    an_array = []
-    an_array[9]
-except Exception:
-    wrap_exc = WrappedException()
-    wrap_exc.throw()
