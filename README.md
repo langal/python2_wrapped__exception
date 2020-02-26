@@ -7,27 +7,27 @@ The common use case is when one wants to present a custom exception class to a d
 One would typically do this:
 
 try:
-    doStuffTHatTHrowsAnException()
+&nbsp;&nbsp;&nbsp;&nbsp;doStuffTHatTHrowsAnException()
 except Exception as e:
-    raise MyCustomException(e.message)
+&nbsp;&nbsp;&nbsp;&nbsp;raise MyCustomException(e.message)
     
 However, the above code causes the execution stack at the time of the first exception to be lost.
 
 The WrappedException allows us to do this:
 
 try:
-    doStuffTHatTHrowsAnException()
+&nbsp;&nbsp;&nbsp;&nbsp;doStuffTHatTHrowsAnException()
 except Exception:
-    WrappedException.throw()
+&nbsp;&nbsp;&nbsp;&nbsp;WrappedException.throw()
     
 Callers can now catch "WrappedException" and still have the original execution stack.
 
 Alternatively, they can do this:
 
 try:
-    doStuffTHatTHrowsAnException()
+&nbsp;&nbsp;&nbsp;&nbsp;doStuffTHatTHrowsAnException()
 except Exception as e:
-    WrappedException(e.message, another_parameter, etc.).throw()
+&nbsp;&nbsp;&nbsp;&nbsp;WrappedException(e.message, another_parameter, etc.).throw()
     
 As WrappedException would typically be subclassed with a "business" exception.
     
